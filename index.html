@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tactical Mage</title>
+
+  <script src="javascript/log.js"></script>
+  <script src="javascript/utils.js"></script>
+  <script src="javascript/unit.js"></script>
+  <script src="javascript/battle.js"></script>
+
+  <script src="javascript/animation/meteor.js"></script>
+  <script src="javascript/animation/slash.js"></script>
+
+  <script src="javascript/canvas.js"></script>
+  <script src="javascript/init.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>Tactical Mage - prototype</header>
+
+  <div id="main-wrapper">
+    <div id="menu-tab"></div>
+
+    <div id="canvas-wrapper">
+      <canvas id="game-grid"></canvas>
+      <div id="game-turnorder"></div>
+      <div id="game-log"></div>
+    </div>
+
+    <div id="selection-tab">
+      <div id="selected-unit-tab">
+        <div id="selected-unit-content">
+
+          <div class="selected-unit-content-block">
+            <img class="selected-content selected-unit-portrait-img" id="selected-unit-portrait-img"/>
+            <div class="selected-content selected-unit-name" id="selected-unit-name"></div>
+          </div>
+
+          <div class="selected-unit-content-block">
+            <div class="selected-content" style="margin-right:10%;">lv. <span id="selected-unit-level"></span></div>
+            <div class="selected-content">HP <span id="selected-unit-hp"></span> / <span id="selected-unit-hp-max"></span></div>
+          </div>
+
+          <!-- TODO <div id="selection-resistance"></div> -->
+        </div>
+
+        <div id="selected-unit-spirit-1">
+          <div class="selected-content-separation"></div>
+
+          <div class="selected-unit-content-block">
+            <img class="selected-content selected-unit-portrait-img" id="selected-unit-spirit-1-img"/>
+            <div class="selected-content selected-unit-name" id="selected-unit-spirit-1-name"></div>
+            <div class="selected-content selected-unit-name" id="selected-unit-spirit-1-element"></div>
+          </div>
+
+          <div class="selected-unit-content-block">
+            <div class="selected-content" style="margin-right:10%;">lv. <span id="selected-unit-spirit-1-level"></span></div>
+            <div class="selected-content">MP <span id="selected-unit-spirit-1-mp"></span> / <span id="selected-unit-spirit-1-mp-max"></span></div>
+          </div>
+
+          <div class="selected-unit-content-block">
+            <div id="selected-unit-spirit-1-actions">
+              <span class="selection-action clickable" id="selected-unit-spirit-1-action-1" onclick="toggleAttack()">Meteor</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="selection-target-content">
+        <div id="selection-target-content-unit">
+
+          <div class="selected-unit-content-block">
+            <img class="selected-content selected-unit-portrait-img" id="target-img"/>
+            <div class="selected-content selected-unit-name" id="target-name"></div>
+          </div>
+
+          <div class="selected-unit-content-block">
+            <div class="selected-content" style="margin-right:10%;">lv. <span id="target-level"></span></div>
+            <div class="selected-content">HP <span id="target-hp"></span></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <a target="_blank" href="./test-animation.html">Test-Animation</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,13 @@
+[{
+	"id": 0,
+	"name": "Rei",
+	"portraitImg": "img/rei_pt.png",
+	"gridImg": "mage1",
+	"type": "character"
+}, {
+	"id": 1,
+	"name": "Shadow",
+	"portraitImg": "img/shadow_pt.png",
+	"gridImg": "shadow",
+	"type": "monster"
+}]

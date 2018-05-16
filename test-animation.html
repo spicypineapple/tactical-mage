@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tactical Mage | Test Animation</title>
+
+  <script src="javascript/utils.js"></script>
+  <script src="javascript/unit.js"></script>
+  <script src="javascript/canvas.js"></script>
+
+  <script src="javascript/animation/meteor.js"></script>
+  <script src="javascript/animation/slash.js"></script>
+
+  <script>
+    window.onload = function() {
+      loadUnitFromJSON(initAnimationTest);
+    }
+
+    function initAnimationTest() {
+      var testUnit = new Unit(listUnitPattern[0]);
+      var testUnitPos = {x:4,y:4};
+      Grid.units[0] = {unit: testUnit, pos: testUnitPos};
+      initGrid();
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>Tactical Mage - prototype</header>
+
+  <div id="main-wrapper">
+    <div id="menu-tab">
+      <span class="selection-action clickable" onclick="initAnimateMeteor({x:4,y:4})">Meteor</span>
+      <span class="selection-action clickable" onclick="initAnimateSlash({x:4,y:4})">Slash</span>
+    </div>
+    <div id="canvas-wrapper">
+      <canvas id="game-grid"></canvas>
+    </div>
+    <div id="selection-tab"></div>
+  </div>
+
+  <footer>
+    <a target="_blank" href="./index.html">Main Game</a>
+  </footer>
+</body>
+</html>
