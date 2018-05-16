@@ -200,43 +200,15 @@ function drawTile(x, y, color) {
  * Display Unit on x,y tile
  * @param {number} x - x pos
  * @param {number} y - y pos
- * @param {number} type - unit type (change unit img)
+ * @param {String} img - img link to the unit's image
  */
-function drawUnit(x,y,type){
-  /* Wobble the cube using a sine wave
-  var wobble = //Math.abs(Math.sin(Date.now()/250)*5);*/
+function drawUnit(x, y, img){
+  var image = new Image();
+  image.src = img;
 
-  /*var size = 25;
-  drawCube(
-    Grid.canvas.width/2 + (x - y)*Grid.tilesize, // x
-    Grid.canvas.height/2 + (x + y - Grid.sy)*Grid.tilesize/2 + Grid.tilesize/1.5 + Grid.tileheight, // y
-    size, size, 5, // dimension
-    color
-  );
-
-  var size = 15;
-  drawCube(
-    Grid.canvas.width/2 + (x - y)*Grid.tilesize, // x
-    Grid.canvas.height/2 + (x + y - Grid.sy)*Grid.tilesize/2 + Grid.tilesize/1.5 + Grid.tileheight - 10, // y
-    size, size, 30, // dimension
-    color
-  );*/
-
-  if (type === "mage1") {
-    var image = new Image();
-    image.src = 'img/rei.png';
-
-    Grid.ctx.drawImage(image,
-      Grid.canvas.width/2 + (x - y)*Grid.tilesize - Grid.tilesize/2,
-      Grid.canvas.height/2 + (x + y - Grid.sy)*Grid.tilesize/2 + Grid.tilesize + Grid.tileheight - 75);
-  } else if (type === "shadow") {
-    var image = new Image();
-    image.src = 'img/shadow.png';
-
-    Grid.ctx.drawImage(image,
-      Grid.canvas.width/2 + (x - y)*Grid.tilesize - Grid.tilesize/2,
-      Grid.canvas.height/2 + (x + y - Grid.sy)*Grid.tilesize/2 + Grid.tilesize + Grid.tileheight - 75);
-  }
+  Grid.ctx.drawImage(image,
+    Grid.canvas.width/2 + (x - y)*Grid.tilesize - Grid.tilesize/2,
+    Grid.canvas.height/2 + (x + y - Grid.sy)*Grid.tilesize/2 + Grid.tilesize + Grid.tileheight - 75);
 }
 
 /**
