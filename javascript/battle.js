@@ -13,7 +13,7 @@
 function generateGridPlacement(allyUnits, availableAllyPos, foeUnits, availableFoePos) {
   Grid.units = []; //format: {unit: Unit, pos: {x,y}}
 
-  if (availableAllyPos.length >= allyUnits.length || availableFoePos.length >= foeUnits.length) {
+  if (availableAllyPos.length >= allyUnits.length && availableFoePos.length >= foeUnits.length) {
 
     for (var i=0; i<allyUnits.length; i++) {
       Grid.units.push({
@@ -30,7 +30,7 @@ function generateGridPlacement(allyUnits, availableAllyPos, foeUnits, availableF
     }
 
   } else {
-    throw new invalidBattleException("There are more units than available unit tiles");
+    throw new invalidBattleException("Error: There are more units than available unit tiles");
   }
 }
 

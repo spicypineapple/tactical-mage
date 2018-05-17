@@ -174,6 +174,9 @@ footer {
 .log-battle {
   color:#9a0000;
 }
+.log-error {
+  color:#9a0000;
+}
 
 /*********************/
 /*  Selection - HUD  */

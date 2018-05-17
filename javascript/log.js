@@ -2,7 +2,8 @@
 var LogType = {
   INFO: 1,
   BATTLE: 2,
-  DIALOG: 3
+  DIALOG: 3,
+  ERROR: 4
 }
 var log = [];
 var logId = 0;
@@ -35,7 +36,12 @@ function addLog(type, message) {
       element.innerHTML = "💬 " + message;
       element.classList.add("log-dialog");
       break;
+    case LogType.ERROR :
+      element.innerHTML = "⚠️ " + message;
+      element.classList.add("log-error");
+      break;
     default:
+      element.innerHTML = message;
       break;
   }
 
