@@ -2,6 +2,9 @@
 /* Grid creation */
 /*****************/
 
+/**
+ * @namespace
+ */
 var Grid = {
   canvas:null,
   ctx:null,
@@ -18,6 +21,9 @@ var Grid = {
   unitheight:53
 }
 
+/**
+ * @enum
+ */
 var DisplayValue = {
   NORMAL: 0,
   HOVER: 1,
@@ -55,8 +61,7 @@ function initGrid() {
   drawGrid();
   drawUnits();
 
-  // Init turn order
-  initTurnOrder();
+  // Once it's ready, we launch battle
   newTurn();
 }
 

@@ -19,7 +19,7 @@ function fetchJSONFile(path, callback) {
  * Get a random int between two values (max not inclusive)
  * @author MDN web docs - Mozilla
  * @param {number} min
- * @param {Number} max
+ * @param {number} max
  */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -31,7 +31,7 @@ function getRandomInt(min, max) {
  * Get a random int between two values (inclusive)
  * @author MDN web docs - Mozilla
  * @param {number} min
- * @param {Number} max
+ * @param {number} max
  */
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -41,7 +41,7 @@ function getRandomIntInclusive(min, max) {
 
 /**
  * Exception thrown in the battle module
- * @param {String} message - exception information
+ * @param {string} message - exception information
  */
 function invalidBattleException(message) {
   addLog(LogType.ERROR, message);

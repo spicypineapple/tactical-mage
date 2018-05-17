@@ -42,4 +42,5 @@ function initCombatTestUnit() {
   var availableFoePos = [{x:4,y:6}];
 
   generateGridPlacement(allyUnits,availableAllyPos,foeUnits,availableFoePos);
+  initTurnOrder();
 }

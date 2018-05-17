@@ -2,16 +2,20 @@
  * @file Combat handler (grid placement, turn order, battle action)
  */
 
+/******************************************************************************/
+/*                               Grid Placement                               */
+/******************************************************************************/
+
 /**
  * Randomly place Units on the available tiles
- * @param {Array} allyUnits - array of allied Units
- * @param {Array} availableAllyPos - array of pos in {x,y} format
- * @param {Array} foeUnits - array of opposing Units
- * @param {Array} availableFoePos - array of pos in {x,y} format
+ * @param {Array.<Unit>} allyUnits - array of allied Units
+ * @param {Array.<{x: number, y: number}>} availableAllyPos - array of pos in {x,y} format
+ * @param {Array.<Unit>} foeUnits - array of opposing Units
+ * @param {Array.<{x: number, y: number}>} availableFoePos - array of pos in {x,y} format
  * @throws {invalidBattleException}
  */
 function generateGridPlacement(allyUnits, availableAllyPos, foeUnits, availableFoePos) {
-  Grid.units = []; //format: {unit: Unit, pos: {x,y}}
+  Grid.units = []; //format: {unit: Unit, pos: {x: number, y: number}}
 
   if (availableAllyPos.length >= allyUnits.length && availableFoePos.length >= foeUnits.length) {
 
@@ -34,17 +38,111 @@ function generateGridPlacement(allyUnits, availableAllyPos, foeUnits, availableF
   }
 }
 
+/******************************************************************************/
+/*                                 Turn Order                                 */
+/******************************************************************************/
 
 /**
- * Calculate Grid.units turn order
+ * Grid.turnOrder = {
+ *   {{unit: Unit, pos: {x: number, y: number}}} currentUnit,
+ *   {number} currentTurnN,
+ *   {number} currentUnitTurnN,
+ *   {Array} 1,
+ *   {Array} 2,
+ *   ...
+ * }
+ * The 1-2-... notation is used as follow:
+ * Grid.turnOrder[i] === [battleId1,battleId2,...]
+ */
+
+/**
+ * Initialize the Turn Order data at the beginning of a battle
  */
 function initTurnOrder() {
-  Grid.units[0].unit.battleId = 0;
-  Grid.units[1].unit.battleId = 1;
+  for (var i=0; i<Grid.units.length; i++) {
+    Grid.units[i].unit.battleId = i;
+  }
 
-  // TODO add stats to calculate this
-  Grid.battleOrder = [0,1];
-  Grid.currentBattleOrder = 0;
+  Grid.turnOrder = {};
+
+  // We display the Unit order for the following 2 turns
+  generateTurnOrder(1);
+  generateTurnOrder(2);
+
+  Grid.turnOrder.currentUnit = null;
+  Grid.turnOrder.currentTurnN = 1;
+  Grid.turnOrder.currentUnitTurnN = 0;
+}
+
+/**
+ * Calculate turn order for specified turn
+ * @param {number} turnNumber - specified turn to calculate turn order of
+ */
+function generateTurnOrder(turnNumber) {
+  // TODO calculate this with Unit stats
+  Grid.turnOrder[turnNumber] = [0,1];
+}
+
+/**
+ * Begin new turn order
+ */
+function newTurn() {
+  newUnitTurn();
+}
+
+/**
+ * Begin new turn for according Unit, which:
+ * 1. select unit;
+ * 2. may prompt a dialog;
+ * 3. execute action if AI
+ */
+function newUnitTurn() {
+  var currentUnitId = Grid.turnOrder[Grid.turnOrder.currentTurnN][Grid.turnOrder.currentUnitTurnN];
+  var currentUnit = Grid.units[currentUnitId];
+  Grid.turnOrder.currentUnit = currentUnit;
+
+  displayTurnOrder();
+
+  mode = "default";
+  selectTile(currentUnit.pos);
+
+  if (currentUnit.unit.isAI) {
+    displayUnitDialog(currentUnit.pos, "Agrougrou", "speak");
+    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b> : Agrougrou");
+    battleAction(currentUnit.unit,
+                 currentUnit.pos,
+                 Grid.units[0].unit,
+                 Grid.units[0].pos,
+                 "slash");
+  } else {
+    displayUnitDialog(currentUnit.pos, "Leave it to me!", "speak");
+    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b> : Leave it to me!");
+  }
+}
+
+/**
+ * End turn action, update turn order data
+ */
+function endUnitTurn() {
+  if (Grid.turnOrder.currentUnitTurnN < Grid.turnOrder[Grid.turnOrder.currentTurnN].length-1) {
+    Grid.turnOrder.currentUnitTurnN++;
+    newUnitTurn();
+  } else {
+    endTurn();
+  }
+}
+
+/**
+ * End turn, which update turn order data
+ */
+function endTurn() {
+  Grid.turnOrder.currentTurnN++;
+  Grid.turnOrder.currentUnitTurnN = 0;
+
+  // We keep displaying the Unit order for the following two turns
+  generateTurnOrder(Grid.turnOrder.currentTurnN+1);
+
+  newTurn();
 }
 
 /**
@@ -54,11 +152,11 @@ function displayTurnOrder() {
   var turnOrderBox = document.getElementById("game-turnorder");
   turnOrderBox.innerHTML = "";
 
-  for (var i=0; i<Grid.battleOrder.length; i++) {
-    if (i >= Grid.currentBattleOrder) {
+  for (var i=0; i<Grid.turnOrder[Grid.turnOrder.currentTurnN].length; i++) {
+    if (i >= Grid.turnOrder.currentUnitTurnN) {
       var newTurnOrder = document.createElement("img");
       newTurnOrder.classList.add("unit-portrait-img");
-      newTurnOrder.setAttribute("src", Grid.units[Grid.battleOrder[i]].unit.portraitImg);
+      newTurnOrder.setAttribute("src", Grid.units[Grid.turnOrder[Grid.turnOrder.currentTurnN][i]].unit.portraitImg);
 
       turnOrderBox.appendChild(newTurnOrder);
       turnOrderBox.innerHTML += "&thinsp;";
@@ -72,15 +170,19 @@ function displayTurnOrder() {
   turnOrderBox.appendChild(newTurnSeparation);
   turnOrderBox.innerHTML += "&thinsp;";
 
-  for (var i=0; i<Grid.battleOrder.length; i++) {
+  for (var i=0; i<Grid.turnOrder[Grid.turnOrder.currentTurnN+1].length; i++) {
     var newTurnOrder = document.createElement("img");
     newTurnOrder.classList.add("unit-portrait-img");
-    newTurnOrder.setAttribute("src", Grid.units[Grid.battleOrder[i]].unit.portraitImg);
+    newTurnOrder.setAttribute("src", Grid.units[Grid.turnOrder[Grid.turnOrder.currentTurnN+1][i]].unit.portraitImg);
 
     turnOrderBox.appendChild(newTurnOrder);
     turnOrderBox.innerHTML += "&thinsp;";
   }
 }
+
+/******************************************************************************/
+/*                               Battle Action                                */
+/******************************************************************************/
 
 /**
  * Compute action on the target
@@ -134,46 +236,10 @@ function battleAction(user,userPos,target,targetPos,action) {
       break;
   }
 
-  window.setTimeout(endTurn, 1000);
+  window.setTimeout(endUnitTurn, 1000);
 }
 
-/**
- * End turn, which update turn order
- */
-function endTurn() {
-  // TODO animation
-  if (Grid.currentBattleOrder >= Grid.units.length - 1) {
-    Grid.currentBattleOrder = 0;
-  } else {
-    Grid.currentBattleOrder++;
-  }
 
-  newTurn();
-}
-
-/**
- * Begin new turn action, which select unit, may prompt a dialog, and execute action if AI
- */
-function newTurn() {
-  displayTurnOrder();
-
-  mode = "default";
-  var battleOrder = Grid.battleOrder[Grid.currentBattleOrder];
-  selectTile(Grid.units[battleOrder].pos);
-
-  if (Grid.units[battleOrder].unit.isAI) {
-    displayUnitDialog(Grid.units[battleOrder].pos, "Agrougrou", "speak");
-    addLog(LogType.DIALOG, "<b>"+Grid.units[battleOrder].unit.name+"</b> : Agrougrou");
-    battleAction(Grid.units[battleOrder].unit,
-                 Grid.units[battleOrder].pos,
-                 Grid.units[0].unit,
-                 Grid.units[0].pos,
-                 "slash");
-  } else {
-    displayUnitDialog(Grid.units[battleOrder].pos, "Leave it to me!", "speak");
-    addLog(LogType.DIALOG, "<b>"+Grid.units[battleOrder].unit.name+"</b> : Leave it to me!");
-  }
-}
 
 var floatingText = [];
 var isDisplayingText = false;
