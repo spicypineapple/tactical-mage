@@ -1,3 +1,39 @@
+/**
+ * @file Combat handler (grid placement, turn order, battle action)
+ */
+
+/**
+ * Randomly place Units on the available tiles
+ * @param {Array} allyUnits - array of allied Units
+ * @param {Array} availableAllyPos - array of pos in {x,y} format
+ * @param {Array} foeUnits - array of opposing Units
+ * @param {Array} availableFoePos - array of pos in {x,y} format
+ * @throws {invalidBattleException}
+ */
+function generateGridPlacement(allyUnits, availableAllyPos, foeUnits, availableFoePos) {
+  Grid.units = []; //format: {unit: Unit, pos: {x,y}}
+
+  if (availableAllyPos.length >= allyUnits.length || availableFoePos.length >= foeUnits.length) {
+
+    for (var i=0; i<allyUnits.length; i++) {
+      Grid.units.push({
+        unit: allyUnits[i],
+        pos: availableAllyPos[getRandomInt(0,availableAllyPos.length)]
+      });
+    }
+
+    for (var i=0; i<foeUnits.length; i++) {
+      Grid.units.push({
+        unit: foeUnits[i],
+        pos: availableFoePos[getRandomInt(0,availableFoePos.length)]
+      });
+    }
+
+  } else {
+    throw new invalidBattleException("There are more units than available unit tiles");
+  }
+}
+
 
 /**
  * Calculate Grid.units turn order

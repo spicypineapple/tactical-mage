@@ -14,3 +14,27 @@ function fetchJSONFile(path, callback) {
   httpRequest.open('GET', path);
   httpRequest.send();
 }
+
+/**
+ * Get a random int between two values (max not inclusive)
+ * @author MDN web docs - Mozilla
+ * @param {number} min
+ * @param {Number} max
+ */
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+/**
+ * Get a random int between two values (inclusive)
+ * @author MDN web docs - Mozilla
+ * @param {number} min
+ * @param {Number} max
+ */
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
