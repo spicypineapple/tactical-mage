@@ -404,8 +404,8 @@ function mouseDownHandler(e) {
     if (mode === "default") {
       selectTile(pos);
     } else if (mode === "attack") {
-      // TODO deal damage on pos
       var target = getUnitOnPos(pos.x,pos.y);
+      // TODO remove 'meteor' hardcode
       battleAction(selectedUnit,selectedPos,target,pos,"meteor");
     }
   }
@@ -432,15 +432,19 @@ function getXYFromMouse(e) {
   }
 }
 
-/** TODO UC */
 var mode = "default";
-function toggleAttack() {
+/**
+ * Set clicked attack as selected; change the reaction to grid tile click (-> action)
+ * @param {number} spiritId - id of the spirit
+ * @param {number} attackId - id of the action
+ */
+function toggleAttack(spiritId, attackId) {
   if (mode != "attack") {
     // TODO change cursor appearance (sword? wand?)
-    document.getElementById("selected-unit-spirit-1-action-1").classList.add("selected");
+    document.getElementById("selected-unit-spirit-"+spiritId+"-action-"+attackId).classList.add("selected");
     mode = "attack";
   } else {
-    document.getElementById("selected-unit-spirit-1-action-1").classList.remove("selected");
+    document.getElementById("selected-unit-spirit-"+spiritId+"-action-"+attackId).classList.remove("selected");
     mode = "default";
   }
 }

@@ -127,6 +127,7 @@ function displaySelectedCharacter(unit) {
 
   //TODO handle multiple spirit
 
+  // add spirit to the unit HUD
   document.getElementById("selected-unit-spirit-1-img").src = unit.spirit[0].portraitImg;
   document.getElementById("selected-unit-spirit-1-name").innerHTML = unit.spirit[0].name;
   document.getElementById("selected-unit-spirit-1-element").innerHTML = unit.spirit[0].element;
@@ -134,9 +135,27 @@ function displaySelectedCharacter(unit) {
   document.getElementById("selected-unit-spirit-1-mp").innerHTML = unit.spirit[0].mp;
   document.getElementById("selected-unit-spirit-1-mp-max").innerHTML = unit.spirit[0].mpmax;
 
-  //TODO get spirit action
+  var actionBlock = document.getElementById("selected-unit-spirit-1-actions");
+  actionBlock.innerHTML = "";
 
-  //document.getElementById("selection-spirit1actions").innerHTML = unit.spirit[0].actions[0];
+  // add spirit action and related listener to spirit HUD
+  for (var i=0; i<unit.spirit[0].actions.length; i++) {
+    var actionEl = document.createElement("span");
+    actionEl.classList.add("selection-action","clickable");
+    actionEl.id = "selected-unit-spirit-1-action-"+i;
+    actionEl.innerHTML = unit.spirit[0].actions[i];
+    actionEl.setAttribute("spiritId",1);
+    actionEl.setAttribute("attackId",i);
+
+    actionBlock.appendChild(actionEl);
+    actionBlock.innerHTML += " ";
+
+    actionEl = document.getElementById("selected-unit-spirit-1-action-"+i);
+    actionEl.addEventListener("click",
+      function(e) {
+        toggleAttack(this.getAttribute("spiritId"), this.getAttribute("attackId"));
+      });
+  }
 
   document.getElementById("selected-unit-spirit-1").style.display = "block";
 
