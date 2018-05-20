@@ -84,6 +84,10 @@ Unit.prototype.calculateStat = function() {
   this.hp = this.hpmax;
 }
 
+/**********/
+/* Battle */
+/**********/
+
 /**
  * Get initiative based on Unit's stat and a roll
  * @returns {number} Unit's initiatve
@@ -93,25 +97,33 @@ Unit.prototype.calculateInit = function() {
   return init;
 }
 
-/**********/
-/* Battle */
-/**********/
+/**
+ * Calculate the damage of the power used on a target depening on Units' stats
+ * @param {Power} power - Power used
+ * @param {Unit} target - Unit targetted
+ * @returns {number} damage or heal done
+ */
+Unit.prototype.calculatePowerDamage = function(power, target) {
+  var damage = (this.int + getRandomIntInclusive(-2,2)) * (-1);
+  return damage;
+}
 
 /**
  * Change current HP of unit by the given number
  * @param {int} chp - The number of HP to add
+ * @returns {boolean} true if the unit is dead
  */
 Unit.prototype.changeHP = function(chp) {
-  if (chp > 0) {
-    if (this.hp + chp > this.hpmax) {
+  if (chp > 0) { // heal
+    if (this.hp + chp > this.hpmax) { // can't have more than max hp
       this.hp = this.hpmax;
     } else {
       this.hp += chp;
     }
-  } else if (chp < 0) {
-    if (this.hp + chp < 0) {
-      // TODO dead
+  } else if (chp < 0) { // damage
+    if (this.hp + chp < 0) { // is under 0 hp
       Grid.units[this.battleId].unit.isAlive = false;
+      return true;
     } else {
       this.hp += chp;
     }
@@ -155,36 +167,36 @@ function displaySelectedCharacter(unit) {
   //TODO handle multiple spirit
 
   // add spirit to the unit HUD
-  document.getElementById("selected-unit-spirit-1-img").src = unit.spirit[0].portraitImg;
-  document.getElementById("selected-unit-spirit-1-name").innerHTML = unit.spirit[0].name;
-  document.getElementById("selected-unit-spirit-1-element").innerHTML = unit.spirit[0].element;
-  document.getElementById("selected-unit-spirit-1-level").innerHTML = unit.spirit[0].level;
-  document.getElementById("selected-unit-spirit-1-mp").innerHTML = unit.spirit[0].mp;
-  document.getElementById("selected-unit-spirit-1-mp-max").innerHTML = unit.spirit[0].mpmax;
+  document.getElementById("selected-unit-spirit-0-img").src = unit.spirit[0].portraitImg;
+  document.getElementById("selected-unit-spirit-0-name").innerHTML = unit.spirit[0].name;
+  document.getElementById("selected-unit-spirit-0-element").innerHTML = unit.spirit[0].element;
+  document.getElementById("selected-unit-spirit-0-level").innerHTML = unit.spirit[0].level;
+  document.getElementById("selected-unit-spirit-0-mp").innerHTML = unit.spirit[0].mp;
+  document.getElementById("selected-unit-spirit-0-mp-max").innerHTML = unit.spirit[0].mpmax;
 
-  var actionBlock = document.getElementById("selected-unit-spirit-1-actions");
+  var actionBlock = document.getElementById("selected-unit-spirit-0-actions");
   actionBlock.innerHTML = "";
 
   // add spirit action and related listener to spirit HUD
-  for (var i=0; i<unit.spirit[0].actions.length; i++) {
+  for (var i=0; i<unit.spirit[0].powers.length; i++) {
     var actionEl = document.createElement("span");
     actionEl.classList.add("selection-action","clickable");
-    actionEl.id = "selected-unit-spirit-1-action-"+i;
-    actionEl.innerHTML = unit.spirit[0].actions[i];
-    actionEl.setAttribute("spiritId",1);
+    actionEl.id = "selected-unit-spirit-0-action-"+i;
+    actionEl.innerHTML = unit.spirit[0].powers[i].name;
+    actionEl.setAttribute("spiritId",0);
     actionEl.setAttribute("attackId",i);
 
     actionBlock.appendChild(actionEl);
     actionBlock.innerHTML += " ";
 
-    actionEl = document.getElementById("selected-unit-spirit-1-action-"+i);
+    actionEl = document.getElementById("selected-unit-spirit-0-action-"+i);
     actionEl.addEventListener("click",
       function(e) {
         toggleAttack(this.getAttribute("spiritId"), this.getAttribute("attackId"));
       });
   }
 
-  document.getElementById("selected-unit-spirit-1").style.display = "block";
+  document.getElementById("selected-unit-spirit-0").style.display = "block";
 
   document.getElementById("selected-unit-tab").classList.remove("monster");
   document.getElementById("selected-unit-tab").classList.add("character");
@@ -195,7 +207,7 @@ function displaySelectedCharacter(unit) {
  * @param {Unit} unit - The unit to display
  */
 function displaySelectedMonster(unit) {
-  document.getElementById("selected-unit-spirit-1").style.display = "none";
+  document.getElementById("selected-unit-spirit-0").style.display = "none";
 
   document.getElementById("selected-unit-tab").classList.remove("character");
   document.getElementById("selected-unit-tab").classList.add("monster");

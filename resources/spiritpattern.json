@@ -1,10 +1,16 @@
 [{
-  "id":0,
-  "name":"Asteria",
-  "portraitImg":"img/asteria_pt.png",
-  "element":"*",
-  "level":1,
-  "mp":100,
-  "mpmax":100,
-  "actions":["Meteor"]
+	"id": 0,
+	"name": "Asteria",
+	"portraitImg": "img/asteria_pt.png",
+	"element": "*",
+	"level": 1,
+	"mp": 100,
+	"mpmax": 100,
+	"powers": [{
+		"name": "Meteor",
+		"animation": "meteor",
+		"MPcost": 10,
+		"powerFormula": 10,
+		"specialEffect": []
+	}]
 }]

@@ -136,11 +136,17 @@ function newUnitTurn() {
   if (currentUnit.unit.isAI) {
     displayUnitDialog(currentUnit.pos, "Agrougrou", "speak");
     addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Agrougrou");
+    var shadowSlash = {
+  		"name": "Slash",
+  		"animation": "slash",
+  		"MPcost": 10,
+  		"powerFormula": 10,
+  		"specialEffect": [] };
     battleAction(currentUnit.unit,
                  currentUnit.pos,
                  Grid.units[0].unit,
                  Grid.units[0].pos,
-                 "slash");
+                 shadowSlash);
   } else {
     displayUnitDialog(currentUnit.pos, "Leave it to me!", "speak");
     addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Leave it to me!");
@@ -215,58 +221,42 @@ function displayTurnOrder() {
  * Compute action on the target
  * Display animation
  * @param {Unit} user - user of action
- * @param {x,y} userPos - tile on which is the user
+ * @param {{x: number, y: number}} userPos - tile on which is the user
  * @param {Unit} target - target of action
- * @param {x,y} targetPos - tile on which is the target
- * @param {Object} action - type of action used
+ * @param {{x: number, y: number}} targetPos - tile on which is the target
+ * @param {Power} power - Power used
  */
-function battleAction(user,userPos,target,targetPos,action) {
-  switch (action) {
+function battleAction(user, userPos, target, targetPos, power) {
+  var message = "<b>" + user.name + "</b> uses <b>" + power.name + "</b>";
+
+  if (target) {
+    var damage = user.calculatePowerDamage(power, target);
+    target.changeHP(damage);
+    displayChangeHP(targetPos, damage, "damage");
+
+    if (damage < 0) {
+      message += ", <b>" + target.name + "</b> loses " + Math.abs(damage) + " hit point";
+    } else {
+      message += ", <b>" + target.name + "</b> gains " + Math.abs(damage) + " hit point";
+    }
+  }
+
+  addLog(LogType.BATTLE, message);
+
+  switch (power.animation) {
     case "meteor":
       initAnimateMeteor(targetPos);
-      if (target) {
-        var damage = -10;
-        target.changeHP(damage);
-        displayChangeHP(targetPos, damage, "damage");
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Meteor</b>, <b>" + target.name + "</b> loses " + Math.abs(damage) + " hit point");
-      } else {
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Meteor</b>");
-      }
       break;
-
     case "heal":
       //initAnimateHeal(targetPos);
-      if (target) {
-        var damage = +10;
-        target.changeHP(damage);
-        displayChangeHP(targetPos, damage, "heal");
-        addLog(LogType.BATTLE, target.name + " " + damage);
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Heal</b>, <b>" + target.name + "</b> gains " + Math.abs(damage) + " hit point");
-      } else {
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Heal</b>");
-      }
       break;
-
     case "slash":
       initAnimateSlash(targetPos);
-      if (target) {
-        var damage = -10;
-        target.changeHP(damage);
-        displayChangeHP(targetPos, damage, "damage");
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Slash</b>, <b>" + target.name + "</b> loses " + Math.abs(damage) + " hit point");
-      } else {
-        addLog(LogType.BATTLE, "<b>"+user.name+"</b> uses <b>Slash</b>");
-      }
-      break;
-
-    default:
       break;
   }
 
   window.setTimeout(endUnitTurn, 1000);
 }
-
-
 
 var floatingText = [];
 var isDisplayingText = false;
