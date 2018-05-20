@@ -38,7 +38,7 @@ function initCombatTestUnit() {
 
   var allyUnits = [Rei];
   var foeUnits = [Shadow];
-  var availableAllyPos = [{x:4,y:1}];
+  var availableAllyPos = [{x:4,y:2}];
   var availableFoePos = [{x:4,y:6}];
 
   generateGridPlacement(allyUnits,availableAllyPos,foeUnits,availableFoePos);
