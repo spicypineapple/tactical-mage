@@ -49,8 +49,18 @@ var Unit = function(data) {
   this.type = data.type;
 
   this.level = 1;
-  this.hpmax = 100;
-  this.hp = 100;
+  this.xp = 0;
+
+  this.str = data.str;
+  this.con = data.con;
+  this.int = data.int;
+  this.wis = data.wis;
+  this.dex = data.dex;
+  this.agi = data.agi;
+  this.luk = data.luk;
+
+  this.calculateStat();
+
   this.resistance = "none";
 
   this.gridImg = data.gridImg;
@@ -64,6 +74,23 @@ var Unit = function(data) {
  */
 Unit.prototype.giveSpirit = function(data) {
   this.spirit.push(data);
+}
+
+/**
+ * Calculate some additional info based on Unit's stat
+ */
+Unit.prototype.calculateStat = function() {
+  this.hpmax = this.con * 10;
+  this.hp = this.hpmax;
+}
+
+/**
+ * Get initiative based on Unit's stat and a roll
+ * @returns {number} Unit's initiatve
+ */
+Unit.prototype.calculateInit = function() {
+  var init = this.agi + getRandomIntInclusive(1,10);
+  return init;
 }
 
 /**********/

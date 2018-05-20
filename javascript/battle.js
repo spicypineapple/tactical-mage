@@ -79,14 +79,41 @@ function initTurnOrder() {
  * @param {number} turnNumber - specified turn to calculate turn order of
  */
 function generateTurnOrder(turnNumber) {
-  // TODO calculate this with Unit stats
-  Grid.turnOrder[turnNumber] = [0,1];
+  var sortUnit = [];
+
+  // generate Units initiative for the current turn
+  for (var i=0; i<Grid.units.length; i++) {
+    var init = Grid.units[i].unit.calculateInit();
+    Grid.units[i].initiative = init;
+    sortUnit.push({
+      battleId: Grid.units[i].unit.battleId,
+      initiative: Grid.units[i].initiative
+    });
+  }
+
+  // Sort Units by initiative
+  sortUnit.sort(function(a,b) {
+    if (a.initiative === b.initiative) {
+      // if they have the same initiatve, we randomly chose either one
+      return getRandomIntInclusive(0,1);
+    } else {
+      return a.initiative - b.initiative;
+    }
+  });
+
+  Grid.turnOrder[turnNumber] = [];
+
+  for (var i=0; i<sortUnit.length; i++) {
+    console.log(sortUnit[i].initiative);
+    Grid.turnOrder[turnNumber].push(sortUnit[i].battleId);
+  }
 }
 
 /**
  * Begin new turn order
  */
 function newTurn() {
+  addLog(LogType.INFO, "Turn " + Grid.turnOrder.currentTurnN);
   newUnitTurn();
 }
 
@@ -108,7 +135,7 @@ function newUnitTurn() {
 
   if (currentUnit.unit.isAI) {
     displayUnitDialog(currentUnit.pos, "Agrougrou", "speak");
-    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b> : Agrougrou");
+    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Agrougrou");
     battleAction(currentUnit.unit,
                  currentUnit.pos,
                  Grid.units[0].unit,
@@ -116,7 +143,7 @@ function newUnitTurn() {
                  "slash");
   } else {
     displayUnitDialog(currentUnit.pos, "Leave it to me!", "speak");
-    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b> : Leave it to me!");
+    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Leave it to me!");
   }
 }
 
