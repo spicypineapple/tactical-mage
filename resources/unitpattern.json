@@ -4,24 +4,24 @@
 	"portraitImg": "img/rei_pt.png",
 	"gridImg": "img/rei_grid.png",
 	"type": "character",
-	"str":10,
-	"con":10,
-	"int":10,
-	"wis":10,
-	"dex":10,
-	"agi":10,
-	"luk":10
+	"str": 8,
+	"con": 10,
+	"int": 10,
+	"wis": 12,
+	"dex": 8,
+	"agi": 12,
+	"luk": 14
 }, {
 	"id": 1,
 	"name": "Shadow",
 	"portraitImg": "img/shadow_pt.png",
 	"gridImg": "img/shadow_grid.png",
 	"type": "monster",
-	"str":10,
-	"con":10,
-	"int":10,
-	"wis":10,
-	"dex":10,
-	"agi":10,
-	"luk":10
+	"str": 8,
+	"con": 8,
+	"int": 8,
+	"wis": 8,
+	"dex": 8,
+	"agi": 8,
+	"luk": 8
 }]

@@ -10,7 +10,11 @@
 		"name": "Meteor",
 		"animation": "meteor",
 		"MPcost": 10,
-		"powerFormula": 10,
+		"powerFormula": {
+			"base": -10,
+			"random": 0.2,
+			"int": -0.1
+		},
 		"specialEffect": []
 	}]
 }]

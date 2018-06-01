@@ -104,7 +104,6 @@ function generateTurnOrder(turnNumber) {
   Grid.turnOrder[turnNumber] = [];
 
   for (var i=0; i<sortUnit.length; i++) {
-    console.log(sortUnit[i].initiative);
     Grid.turnOrder[turnNumber].push(sortUnit[i].battleId);
   }
 }
@@ -140,7 +139,7 @@ function newUnitTurn() {
   		"name": "Slash",
   		"animation": "slash",
   		"MPcost": 10,
-  		"powerFormula": 10,
+  		"powerFormula": { "base": -10 },
   		"specialEffect": [] };
     battleAction(currentUnit.unit,
                  currentUnit.pos,

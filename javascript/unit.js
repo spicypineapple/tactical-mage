@@ -104,7 +104,17 @@ Unit.prototype.calculateInit = function() {
  * @returns {number} damage or heal done
  */
 Unit.prototype.calculatePowerDamage = function(power, target) {
-  var damage = (this.int + getRandomIntInclusive(-2,2)) * (-1);
+  let damage = 0;
+  if (power.powerFormula.base) {
+    damage += power.powerFormula.base;
+  }
+  if (power.powerFormula.int) {
+    damage += this.int * power.powerFormula.int;
+  }
+  if (power.powerFormula.random) {
+    damage = getRandomIntInclusive(damage * (1 - power.powerFormula.random), damage * (1 + power.powerFormula.random));
+  }
+
   return damage;
 }
 
