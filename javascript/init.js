@@ -9,7 +9,6 @@
  * with set allies and enemies.
  */
 
-
 window.onload = function() {
   loadUnitFromJSON(initCombatTest);
 }
@@ -18,7 +17,7 @@ window.onload = function() {
  * Testing of the combat module
  */
 function initCombatTest() {
-  addLog(LogType.INFO, "initCombatTest");
+  Log.addLog(LogType.INFO, "initCombatTest");
 
   initCombatTestUnit();
   initGrid();
@@ -32,14 +31,14 @@ function initCombatTest() {
 function initCombatTestUnit() {
   Grid.units = [];
 
-  var Rei = new Unit(listUnitPattern[0]);
+  const Rei = new Unit(listUnitPattern[0]);
   Rei.giveSpirit(listSpiritPattern[0]);
-  var Shadow = new Unit(listUnitPattern[1]);
+  const Shadow = new Unit(listUnitPattern[1]);
 
-  var allyUnits = [Rei];
-  var foeUnits = [Shadow];
-  var availableAllyPos = [{x:4,y:2}];
-  var availableFoePos = [{x:4,y:6}];
+  const allyUnits = [Rei];
+  const foeUnits = [Shadow];
+  const availableAllyPos = [{x:4,y:2}];
+  const availableFoePos = [{x:4,y:6}];
 
   generateGridPlacement(allyUnits,availableAllyPos,foeUnits,availableFoePos);
   initTurnOrder();

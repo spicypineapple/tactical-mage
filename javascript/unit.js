@@ -100,7 +100,7 @@ Unit.prototype.calculateInit = function() {
 /**
  * Calculate the damage of the power used on a target depening on Units' stats
  * @param {Power} power - Power used
- * @param {Unit} target - Unit targetted
+ * @param {Unit} target - Unit targeted
  * @returns {number} damage or heal done
  */
 Unit.prototype.calculatePowerDamage = function(power, target) {
@@ -132,6 +132,7 @@ Unit.prototype.changeHP = function(chp) {
     }
   } else if (chp < 0) { // damage
     if (this.hp + chp < 0) { // is under 0 hp
+      this.hp = 0;
       Grid.units[this.battleId].unit.isAlive = false;
       return true;
     } else {

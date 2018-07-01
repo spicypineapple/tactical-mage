@@ -112,7 +112,7 @@ function generateTurnOrder(turnNumber) {
  * Begin new turn order
  */
 function newTurn() {
-  addLog(LogType.INFO, "Turn " + Grid.turnOrder.currentTurnN);
+  Log.addLog(LogType.INFO, "Turn " + Grid.turnOrder.currentTurnN);
   newUnitTurn();
 }
 
@@ -134,7 +134,7 @@ function newUnitTurn() {
 
   if (currentUnit.unit.isAI) {
     displayUnitDialog(currentUnit.pos, "Agrougrou", "speak");
-    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Agrougrou");
+    Log.addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Agrougrou");
     var shadowSlash = {
   		"name": "Slash",
   		"animation": "slash",
@@ -148,14 +148,19 @@ function newUnitTurn() {
                  shadowSlash);
   } else {
     displayUnitDialog(currentUnit.pos, "Leave it to me!", "speak");
-    addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Leave it to me!");
+    Log.addLog(LogType.DIALOG, "<b>" + currentUnit.unit.name + "</b>: Leave it to me!");
   }
 }
 
 /**
- * End turn action, update turn order data
+ * End turn action, update turn order data ; end battle if a team lose
  */
 function endUnitTurn() {
+  for (var i=0; i<Grid.units.length; i++) {
+    if (!Grid.units[i].unit.isAlive) {
+      Log.addLog(LogType.INFO, Grid.units[i].unit.name + " is dead.");
+    }
+  }
   if (Grid.turnOrder.currentUnitTurnN < Grid.turnOrder[Grid.turnOrder.currentTurnN].length-1) {
     Grid.turnOrder.currentUnitTurnN++;
     newUnitTurn();
@@ -240,7 +245,7 @@ function battleAction(user, userPos, target, targetPos, power) {
     }
   }
 
-  addLog(LogType.BATTLE, message);
+  Log.addLog(LogType.BATTLE, message);
 
   switch (power.animation) {
     case "meteor":
