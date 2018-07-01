@@ -11,12 +11,12 @@ var listSpiritPattern = [];
  * @param {function} callback - Function to be called once the list is populated
  */
 function loadUnitFromJSON(callback) {
-  fetchJSONFile('resources/unitpattern.json', function(data) {
-    for (var i=0; i<data.length; i++) {
-      listUnitPattern[data[i].id] = data[i];
-    }
-    loadSpiritFromJSON(callback);
-  });
+    fetchJSONFile('resources/unitpattern.json', function(data) {
+        for (var i=0; i<data.length; i++) {
+            listUnitPattern[data[i].id] = data[i];
+        }
+        loadSpiritFromJSON(callback);
+    });
 }
 
 /**
@@ -24,12 +24,12 @@ function loadUnitFromJSON(callback) {
  * @param {function} callback - Function to be called once the list is populated
  */
 function loadSpiritFromJSON(callback) {
-  fetchJSONFile('resources/spiritpattern.json', function(data) {
-    for (var i=0; i<data.length; i++) {
-      listSpiritPattern[data[i].id] = data[i];
-    }
-    callback();
-  });
+    fetchJSONFile('resources/spiritpattern.json', function(data) {
+        for (var i=0; i<data.length; i++) {
+            listSpiritPattern[data[i].id] = data[i];
+        }
+        callback();
+    });
 }
 
 /*****************/
@@ -42,30 +42,30 @@ function loadSpiritFromJSON(callback) {
  * @param {Object} data - The unit model @see listUnitPattern
  */
 var Unit = function(data) {
-  this.id = data.id;
-  this.portraitImg = data.portraitImg;
-  this.name = data.name;
+    this.id = data.id;
+    this.portraitImg = data.portraitImg;
+    this.name = data.name;
 
-  this.type = data.type;
+    this.type = data.type;
 
-  this.level = 1;
-  this.xp = 0;
+    this.level = 1;
+    this.xp = 0;
 
-  this.str = data.str;
-  this.con = data.con;
-  this.int = data.int;
-  this.wis = data.wis;
-  this.dex = data.dex;
-  this.agi = data.agi;
-  this.luk = data.luk;
+    this.str = data.str;
+    this.con = data.con;
+    this.int = data.int;
+    this.wis = data.wis;
+    this.dex = data.dex;
+    this.agi = data.agi;
+    this.luk = data.luk;
 
-  this.calculateStat();
+    this.calculateStat();
 
-  this.resistance = "none";
+    this.resistance = "none";
 
-  this.gridImg = data.gridImg;
+    this.gridImg = data.gridImg;
 
-  this.spirit = [];
+    this.spirit = [];
 }
 
 /**
@@ -73,15 +73,15 @@ var Unit = function(data) {
  * @param {Object} data - The spirit model
  */
 Unit.prototype.giveSpirit = function(data) {
-  this.spirit.push(data);
+    this.spirit.push(data);
 }
 
 /**
  * Calculate some additional info based on Unit's stat
  */
 Unit.prototype.calculateStat = function() {
-  this.hpmax = this.con * 10;
-  this.hp = this.hpmax;
+    this.hpmax = this.con * 10;
+    this.hp = this.hpmax;
 }
 
 /**********/
@@ -93,8 +93,8 @@ Unit.prototype.calculateStat = function() {
  * @returns {number} Unit's initiatve
  */
 Unit.prototype.calculateInit = function() {
-  var init = this.agi + getRandomIntInclusive(1,10);
-  return init;
+    var init = this.agi + getRandomIntInclusive(1,10);
+    return init;
 }
 
 /**
@@ -104,18 +104,18 @@ Unit.prototype.calculateInit = function() {
  * @returns {number} damage or heal done
  */
 Unit.prototype.calculatePowerDamage = function(power, target) {
-  let damage = 0;
-  if (power.powerFormula.base) {
-    damage += power.powerFormula.base;
-  }
-  if (power.powerFormula.int) {
-    damage += this.int * power.powerFormula.int;
-  }
-  if (power.powerFormula.random) {
-    damage = getRandomIntInclusive(damage * (1 - power.powerFormula.random), damage * (1 + power.powerFormula.random));
-  }
+    let damage = 0;
+    if (power.powerFormula.base) {
+        damage += power.powerFormula.base;
+    }
+    if (power.powerFormula.int) {
+        damage += this.int * power.powerFormula.int;
+    }
+    if (power.powerFormula.random) {
+        damage = getRandomIntInclusive(damage * (1 - power.powerFormula.random), damage * (1 + power.powerFormula.random));
+    }
 
-  return damage;
+    return damage;
 }
 
 /**
@@ -124,21 +124,21 @@ Unit.prototype.calculatePowerDamage = function(power, target) {
  * @returns {boolean} true if the unit is dead
  */
 Unit.prototype.changeHP = function(chp) {
-  if (chp > 0) { // heal
-    if (this.hp + chp > this.hpmax) { // can't have more than max hp
-      this.hp = this.hpmax;
-    } else {
-      this.hp += chp;
+    if (chp > 0) { // heal
+        if (this.hp + chp > this.hpmax) { // can't have more than max hp
+            this.hp = this.hpmax;
+        } else {
+            this.hp += chp;
+        }
+    } else if (chp < 0) { // damage
+        if (this.hp + chp < 0) { // is under 0 hp
+            this.hp = 0;
+            Grid.units[this.battleId].unit.isAlive = false;
+            return true;
+        } else {
+            this.hp += chp;
+        }
     }
-  } else if (chp < 0) { // damage
-    if (this.hp + chp < 0) { // is under 0 hp
-      this.hp = 0;
-      Grid.units[this.battleId].unit.isAlive = false;
-      return true;
-    } else {
-      this.hp += chp;
-    }
-  }
 }
 
 /****************/
@@ -150,23 +150,23 @@ Unit.prototype.changeHP = function(chp) {
  * @param {Unit} unit - The unit to display
  */
 function displaySelectedUnit(unit) {
-  document.getElementById("selected-unit-portrait-img").src = unit.portraitImg;
-  document.getElementById("selected-unit-name").innerHTML = unit.name;
-  document.getElementById("selected-unit-level").innerHTML = unit.level;
-  document.getElementById("selected-unit-hp").innerHTML = unit.hp;
-  document.getElementById("selected-unit-hp-max").innerHTML = unit.hpmax;
+    document.getElementById("selected-unit-portrait-img").src = unit.portraitImg;
+    document.getElementById("selected-unit-name").innerHTML = unit.name;
+    document.getElementById("selected-unit-level").innerHTML = unit.level;
+    document.getElementById("selected-unit-hp").innerHTML = unit.hp;
+    document.getElementById("selected-unit-hp-max").innerHTML = unit.hpmax;
 
-  // display extra info relative to its type
-  switch (unit.type) {
-    case "character":
-      displaySelectedCharacter(unit);
-      break;
-    case "monster":
-      displaySelectedMonster(unit);
-      break;
-  }
+    // display extra info relative to its type
+    switch (unit.type) {
+        case "character":
+            displaySelectedCharacter(unit);
+            break;
+        case "monster":
+            displaySelectedMonster(unit);
+            break;
+    }
 
-  document.getElementById("selected-unit-tab").style.display = "block";
+    document.getElementById("selected-unit-tab").style.display = "block";
 }
 
 /**
@@ -175,42 +175,42 @@ function displaySelectedUnit(unit) {
  */
 function displaySelectedCharacter(unit) {
 
-  //TODO handle multiple spirit
+    //TODO handle multiple spirit
 
-  // add spirit to the unit HUD
-  document.getElementById("selected-unit-spirit-0-img").src = unit.spirit[0].portraitImg;
-  document.getElementById("selected-unit-spirit-0-name").innerHTML = unit.spirit[0].name;
-  document.getElementById("selected-unit-spirit-0-element").innerHTML = unit.spirit[0].element;
-  document.getElementById("selected-unit-spirit-0-level").innerHTML = unit.spirit[0].level;
-  document.getElementById("selected-unit-spirit-0-mp").innerHTML = unit.spirit[0].mp;
-  document.getElementById("selected-unit-spirit-0-mp-max").innerHTML = unit.spirit[0].mpmax;
+    // add spirit to the unit HUD
+    document.getElementById("selected-unit-spirit-0-img").src = unit.spirit[0].portraitImg;
+    document.getElementById("selected-unit-spirit-0-name").innerHTML = unit.spirit[0].name;
+    document.getElementById("selected-unit-spirit-0-element").innerHTML = unit.spirit[0].element;
+    document.getElementById("selected-unit-spirit-0-level").innerHTML = unit.spirit[0].level;
+    document.getElementById("selected-unit-spirit-0-mp").innerHTML = unit.spirit[0].mp;
+    document.getElementById("selected-unit-spirit-0-mp-max").innerHTML = unit.spirit[0].mpmax;
 
-  var actionBlock = document.getElementById("selected-unit-spirit-0-actions");
-  actionBlock.innerHTML = "";
+    var actionBlock = document.getElementById("selected-unit-spirit-0-actions");
+    actionBlock.innerHTML = "";
 
-  // add spirit action and related listener to spirit HUD
-  for (var i=0; i<unit.spirit[0].powers.length; i++) {
-    var actionEl = document.createElement("span");
-    actionEl.classList.add("selection-action","clickable");
-    actionEl.id = "selected-unit-spirit-0-action-"+i;
-    actionEl.innerHTML = unit.spirit[0].powers[i].name;
-    actionEl.setAttribute("spiritId",0);
-    actionEl.setAttribute("attackId",i);
+    // add spirit action and related listener to spirit HUD
+    for (var i=0; i<unit.spirit[0].powers.length; i++) {
+        var actionEl = document.createElement("span");
+        actionEl.classList.add("selection-action","clickable");
+        actionEl.id = "selected-unit-spirit-0-action-"+i;
+        actionEl.innerHTML = unit.spirit[0].powers[i].name;
+        actionEl.setAttribute("spiritId",0);
+        actionEl.setAttribute("attackId",i);
 
-    actionBlock.appendChild(actionEl);
-    actionBlock.innerHTML += " ";
+        actionBlock.appendChild(actionEl);
+        actionBlock.innerHTML += " ";
 
-    actionEl = document.getElementById("selected-unit-spirit-0-action-"+i);
-    actionEl.addEventListener("click",
-      function(e) {
-        toggleAttack(this.getAttribute("spiritId"), this.getAttribute("attackId"));
-      });
-  }
+        actionEl = document.getElementById("selected-unit-spirit-0-action-"+i);
+        actionEl.addEventListener("click",
+        function(e) {
+            toggleAttack(this.getAttribute("spiritId"), this.getAttribute("attackId"));
+        });
+    }
 
-  document.getElementById("selected-unit-spirit-0").style.display = "block";
+    document.getElementById("selected-unit-spirit-0").style.display = "block";
 
-  document.getElementById("selected-unit-tab").classList.remove("monster");
-  document.getElementById("selected-unit-tab").classList.add("character");
+    document.getElementById("selected-unit-tab").classList.remove("monster");
+    document.getElementById("selected-unit-tab").classList.add("character");
 }
 
 /**
@@ -218,17 +218,17 @@ function displaySelectedCharacter(unit) {
  * @param {Unit} unit - The unit to display
  */
 function displaySelectedMonster(unit) {
-  document.getElementById("selected-unit-spirit-0").style.display = "none";
+    document.getElementById("selected-unit-spirit-0").style.display = "none";
 
-  document.getElementById("selected-unit-tab").classList.remove("character");
-  document.getElementById("selected-unit-tab").classList.add("monster");
+    document.getElementById("selected-unit-tab").classList.remove("character");
+    document.getElementById("selected-unit-tab").classList.add("monster");
 }
 
 /**
  * Remove the Unit info from the 'selected HUD'
  */
 function hideSelectedUnit() {
-  document.getElementById("selected-unit-tab").style.display = "none";
+    document.getElementById("selected-unit-tab").style.display = "none";
 }
 
 /**
@@ -236,22 +236,22 @@ function hideSelectedUnit() {
  * @param {Unit} unit - The unit to display
  */
 function displayTarget(unit) {
-  if (unit) {
-    document.getElementById("target-img").src = unit.portraitImg;
-    document.getElementById("target-name").innerHTML = unit.name;
-    document.getElementById("target-level").innerHTML = unit.level;
-    document.getElementById("target-hp").innerHTML = unit.hp;
+    if (unit) {
+        document.getElementById("target-img").src = unit.portraitImg;
+        document.getElementById("target-name").innerHTML = unit.name;
+        document.getElementById("target-level").innerHTML = unit.level;
+        document.getElementById("target-hp").innerHTML = unit.hp;
 
-    document.getElementById("selection-target-content").style.display = "block";
+        document.getElementById("selection-target-content").style.display = "block";
 
-    if (unit.type === "character") {
-      document.getElementById("selection-target-content").classList.remove("monster");
-      document.getElementById("selection-target-content").classList.add("character");
-    } else if (unit.type === "monster") {
-      document.getElementById("selection-target-content").classList.remove("character");
-      document.getElementById("selection-target-content").classList.add("monster");
+        if (unit.type === "character") {
+            document.getElementById("selection-target-content").classList.remove("monster");
+            document.getElementById("selection-target-content").classList.add("character");
+        } else if (unit.type === "monster") {
+            document.getElementById("selection-target-content").classList.remove("character");
+            document.getElementById("selection-target-content").classList.add("monster");
+        }
+    } else {
+        document.getElementById("selection-target-content").style.display = "none";
     }
-  } else {
-    document.getElementById("selection-target-content").style.display = "none";
-  }
 }

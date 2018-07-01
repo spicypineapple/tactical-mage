@@ -10,17 +10,17 @@
  */
 
 window.onload = function() {
-  loadUnitFromJSON(initCombatTest);
+    loadUnitFromJSON(initCombatTest);
 }
 
 /**
  * Testing of the combat module
  */
 function initCombatTest() {
-  Log.addLog(LogType.INFO, "initCombatTest");
+    Log.addLog(LogType.INFO, "initCombatTest");
 
-  initCombatTestUnit();
-  initGrid();
+    initCombatTestUnit();
+    initGrid();
 }
 
 /**
@@ -29,17 +29,17 @@ function initCombatTest() {
  * enemy: level 1 Shadow
  */
 function initCombatTestUnit() {
-  Grid.units = [];
+    Grid.units = [];
 
-  const Rei = new Unit(listUnitPattern[0]);
-  Rei.giveSpirit(listSpiritPattern[0]);
-  const Shadow = new Unit(listUnitPattern[1]);
+    const Rei = new Unit(listUnitPattern[0]);
+    Rei.giveSpirit(listSpiritPattern[0]);
+    const Shadow = new Unit(listUnitPattern[1]);
 
-  const allyUnits = [Rei];
-  const foeUnits = [Shadow];
-  const availableAllyPos = [{x:4,y:2}];
-  const availableFoePos = [{x:4,y:6}];
+    const allyUnits = [Rei];
+    const foeUnits = [Shadow];
+    const availableAllyPos = [{x:4,y:2}];
+    const availableFoePos = [{x:4,y:6}];
 
-  generateGridPlacement(allyUnits,availableAllyPos,foeUnits,availableFoePos);
-  initTurnOrder();
+    generateGridPlacement(allyUnits,availableAllyPos,foeUnits,availableFoePos);
+    initTurnOrder();
 }

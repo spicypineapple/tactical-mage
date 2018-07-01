@@ -14,10 +14,10 @@
 * @param {Object} data - The power model
 */
 var Power = function(data) {
-  this.name = data.name;
-  this.animation = data.animation;
+    this.name = data.name;
+    this.animation = data.animation;
 
-  this.MPcost = data.MPcost;
-  this.powerFormula = data.powerFormula;
-  this.specialEffect = data.specialEffect;
+    this.MPcost = data.MPcost;
+    this.powerFormula = data.powerFormula;
+    this.specialEffect = data.specialEffect;
 }
